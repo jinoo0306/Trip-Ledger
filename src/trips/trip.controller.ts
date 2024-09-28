@@ -20,11 +20,23 @@ export class TripsController {
 
   @Post()
   @ApiOperation({
-    summary: 'Create a trip',
-    description: '여행을 생성합니다.',
+    summary: 'Create a new trip',
+    description: '새로운 여행을 생성합니다.',
   })
-  createTrip(@Body() createTripDto: CreateTripDto): Promise<Trip> {
-    return this.tripsService.createTrip(createTripDto);
+  @ApiResponse({
+    status: 201,
+    description: 'The trip has been successfully created.',
+  })
+  async createTrip(
+    @Body() createTripDto: CreateTripDto,
+  ): Promise<{ data: Trip; status: number; message: string }> {
+    const trip = await this.tripsService.createTrip(createTripDto);
+
+    return {
+      data: trip,
+      status: 201,
+      message: 'Trip created successfully',
+    };
   }
 
   @Get()
@@ -50,7 +62,7 @@ export class TripsController {
   })
   async getAllTrips() {
     const trips = await this.tripsService.getAllTrips();
-    return { trips }; // 명시적으로 응답을 직접 설정
+    return { trips, status: 200, message: 'Trips fetched successfully' };
   }
 
   @Put(':trip_id')
@@ -58,11 +70,17 @@ export class TripsController {
     summary: 'Update a trip',
     description: '여행을 수정합니다.',
   })
-  updateTrip(
+  async updateTrip(
     @Param('trip_id') tripId: number,
     @Body() updateTripDto: UpdateTripDto,
-  ): Promise<Trip> {
-    return this.tripsService.updateTrip(tripId, updateTripDto);
+  ): Promise<{ data: Trip; status: number; message: string }> {
+    const trip = await this.tripsService.updateTrip(tripId, updateTripDto);
+
+    return {
+      data: trip,
+      status: 200,
+      message: 'Trip updated successfully',
+    };
   }
 
   @Delete(':trip_id')
@@ -70,7 +88,15 @@ export class TripsController {
     summary: 'Delete a trip',
     description: '여행을 삭제합니다.',
   })
-  deleteTrip(@Param('trip_id') tripId: number): Promise<void> {
-    return this.tripsService.deleteTrip(tripId);
+  async deleteTrip(
+    @Param('trip_id') tripId: number,
+  ): Promise<{ data: { id: number }; status: number; message: string }> {
+    await this.tripsService.deleteTrip(tripId); // trip 삭제 처리
+
+    return {
+      data: { id: tripId }, // 삭제된 여행의 ID 반환
+      status: 200, // 성공 상태 코드
+      message: 'Trip deleted successfully', // 성공 메시지
+    };
   }
 }

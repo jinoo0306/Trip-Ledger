@@ -10,7 +10,9 @@ import {
 } from '@nestjs/common';
 import { ExpensesService } from './expense.service';
 import { Expense } from './expense.entity';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { CreateExpenseDto } from './dto/create-expense.dto';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('expenses')
 @Controller('expenses')
@@ -22,11 +24,15 @@ export class ExpensesController {
     summary: 'Create an expense',
     description: '여행에 지출을 생성합니다.',
   })
+  @ApiResponse({
+    status: 201,
+    description: 'The expense has been successfully created.',
+  })
   createExpense(
     @Param('trip_id') tripId: number,
-    @Body() expenseData: Partial<Expense>,
+    @Body() createExpenseData: CreateExpenseDto,
   ): Promise<Expense> {
-    return this.expensesService.createExpense(tripId, expenseData);
+    return this.expensesService.createExpense(tripId, createExpenseData);
   }
 
   @Get(':trip_id')
@@ -49,9 +55,13 @@ export class ExpensesController {
   updateExpense(
     @Param('trip_id') tripId: number,
     @Param('expense_id') expenseId: number,
-    @Body() expenseData: Partial<Expense>,
+    @Body() updateExpenseDto: UpdateExpenseDto,
   ): Promise<Expense> {
-    return this.expensesService.updateExpense(tripId, expenseId, expenseData);
+    return this.expensesService.updateExpense(
+      tripId,
+      expenseId,
+      updateExpenseDto,
+    );
   }
 
   @Delete(':trip_id/:expense_id')
