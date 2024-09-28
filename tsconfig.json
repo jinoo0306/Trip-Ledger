@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "esModuleInterop": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,                
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
@@ -16,9 +16,7 @@
     "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": true, 
-    "noFallthroughCasesInSwitch": true       
-  },
-  "include": ["src"],                   
-  "exclude": ["node_modules"]        
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false
+  }
 }
