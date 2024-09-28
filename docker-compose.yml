@@ -1,27 +1,29 @@
 version: '3.8'
 services:
   backend:
+    container_name: Trip-Ledger-Backend
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - '8080:8080'
     environment:
-      DATABASE_HOST: db
-      DATABASE_PORT: 3306
-      DATABASE_USER: root
-      DATABASE_PASSWORD: rootpassword
-      DATABASE_NAME: mydatabase
+      DB_HOST: Trip-Ledger-MySQL # 환경 변수는 Trip-Ledger-MySQL로 설정
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
     depends_on:
       - db
 
   db:
+    container_name: Trip-Ledger-MySQL # 실제 컨테이너 이름이 이 값이어야 합니다
     image: mysql:8.0
     ports:
       - '3306:3306'
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: mydatabase
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     volumes:
       - db-data:/var/lib/mysql
 

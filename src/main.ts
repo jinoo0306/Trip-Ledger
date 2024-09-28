@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 // Swagger 관련 import 추가
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -17,10 +18,12 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger-ui/index.html', app, document);
 
-  console.log('Database Host:', process.env.DATABASE_HOST);
-  console.log('Database User:', process.env.DATABASE_USER);
-  console.log('Database Password:', process.env.DATABASE_PASSWORD);
-  console.log('Database Name:', process.env.DATABASE_NAME);
+  // console.log('DB Host:', process.env.DB_HOST);
+  console.log('DB User:', process.env.DB_USER);
+  console.log('DB Password:', process.env.DB_PASSWORD);
+  console.log('DB Name:', process.env.DB_NAME);
+
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(8080);
 }
